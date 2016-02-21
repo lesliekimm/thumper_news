@@ -2,11 +2,11 @@ var app = angular.module('thumperNews', []);
 
 app.controller('MainCtrl', ['$scope', function($scope) {
   	$scope.posts = [
-  		{title: 'post 1', upvotes: 5},
-  		{title: 'post 2', upvotes: 2},
-  		{title: 'post 3', upvotes: 15},
-  		{title: 'post 4', upvotes: 9},
-  		{title: 'post 5', upvotes: 4}
+  		{title: 'post 1', link: 'www.google.com', upvotes: 5},
+  		{title: 'post 2', link: 'www.google.com', upvotes: 2},
+  		{title: 'post 3', link: 'www.google.com', upvotes: 15},
+  		{title: 'post 4', link: 'www.google.com', upvotes: 9},
+  		{title: 'post 5', link: 'www.google.com', upvotes: 4}
 	];
 
 	$scope.addPost = function() {
