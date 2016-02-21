@@ -1,5 +1,12 @@
 var app = angular.module('thumperNews', []);
 
+app.factory('posts', [function(){
+  	var o = {
+    	posts: []
+  	};
+  	return o;
+}]);
+
 app.controller('MainCtrl', ['$scope', function($scope) {
   	$scope.posts = [
   		{title: 'post 1', link: 'www.google.com', upvotes: 5},
