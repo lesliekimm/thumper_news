@@ -27,30 +27,31 @@ app.factory('posts', ['$http', function($http) {
   	};
 
     o.getAll = function() {
-      return $http.get('/posts/').success(function(data) {
+      return $http.get('/posts').success(function(data) {
         angular.copy(data, o.posts);
+      });
+    };
+
+    o.create = function(post) {
+      return $http.post('/posts', post).success(function(data){
+        o.posts.push(data);
       });
     };
   	return o;
 }]);
 
 app.controller('MainCtrl', ['$scope', 'posts', function($scope, posts) {
-  	$scope.posts = posts.posts;
+  $scope.posts = posts.posts;
 
-	$scope.addPost = function() {
-		if(!$scope.title || $scope.title === '') { return; }
-  		$scope.posts.push({
-  			title: $scope.title,
-  			link: $scope.link,
-  			upvotes: 0,
-  			comments: [
-    			{author: 'Mowgli', body: 'Hi cuzin!', upvotes: 0},
-    			{author: 'Howie', body: 'Hi brodder!', upvotes: 0}
-  			]
-  		});
-  		$scope.title = '';
-  		$scope.link = '';
-	};
+	$scope.addPost = function(){
+    if(!$scope.title || $scope.title === '') { return; }
+    posts.create({
+      title: $scope.title,
+      link: $scope.link,
+    });
+    $scope.title = '';
+    $scope.link = '';
+  };
 
 	$scope.incrementUpvotes = function(post) {
   		post.upvotes += 1;
