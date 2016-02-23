@@ -7,9 +7,9 @@ var bodyParser = require('body-parser');
 
 // Require mongoose, connect and require mongoose models
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/news');
 require('./models/Posts');
 require('./models/Comments');
+mongoose.connect('mongodb://localhost/news');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -33,6 +33,7 @@ app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+    console.log(req);
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
