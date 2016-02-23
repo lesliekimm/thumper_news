@@ -60,6 +60,13 @@ app.factory('posts', ['$http', function($http) {
       return $http.post('/posts/' + id + '/comments', comment);
     };
 
+    o.upvoteComment = function(post, comment) {
+      return $http.put('/posts/' + post._id + '/comments/' + comment._id + '/upvote')
+        .success(function(data) {
+          comment.upvotes += 1;
+        });
+    };
+
   	return o;
 }]);
 
@@ -96,6 +103,6 @@ app.controller('PostsCtrl', ['$scope', 'posts','post', function($scope, posts, p
 };
 
 	$scope.incrementUpvotes = function(comment) {
-  		comment.upvotes += 1;
+  		posts.upvoteComment(post, comment);
 	};
 }]);
