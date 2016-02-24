@@ -14,90 +14,90 @@ router.get('/', function(req, res, next) {
 
 /* GET post json */
 router.get('/posts', function(req, res, next) {
-  	Post.find(function(err, posts) {
-    	if(err) { return next(err); }
-	    res.json(posts);
-  	});
+    Post.find(function(err, posts) {
+        if(err) { return next(err); }
+        res.json(posts);
+    });
 });
 
 /* POST post */
 router.post('/posts', auth, function(req, res, next) {
-  	var post = new Post(req.body);
+    var post = new Post(req.body);
     post.author = req.payload.username;
 
-  	post.save(function(err, post) {
-    	if (err) { return next(err); }
-    	res.json(post);
-  	});
+    post.save(function(err, post) {
+        if (err) { return next(err); }
+        res.json(post);
+    });
 });
 
 /* Preload post objects in routes/index.js so when a route URL
    is defined with :post, this function will run first */
 router.param('post', function(req, res, next, id) {
-  	var query = Post.findById(id);
+    var query = Post.findById(id);
 
-  	query.exec(function (err, post) {
-    	if (err) { return next(err); }
-    	if (!post) { return next(new Error('can\'t find post')); }
+    query.exec(function (err, post) {
+        if (err) { return next(err); }
+        if (!post) { return next(new Error('can\'t find post')); }
 
-    	req.post = post;
-    	return next();
-  	});
+        req.post = post;
+        return next();
+    });
 });
 
 /* GET :post post object */
 router.get('/posts/:post', function(req, res) {
-	req.post.populate('comments', function(err, post) {
-		if (err) { return next(err); }
-		res.json(post);
-	});
+    req.post.populate('comments', function(err, post) {
+        if (err) { return next(err); }
+        res.json(post);
+    });
 });
 
 /* PUT :post upvote */
 router.put('/posts/:post/upvote', auth, function(req, res, next) {
-  	req.post.upvote(function(err, post) {
-    	if (err) { return next(err); }
-    	res.json(post);
-  	});
+    req.post.upvote(function(err, post) {
+        if (err) { return next(err); }
+        res.json(post);
+    });
 });
 
 /* POST comment */
 router.post('/posts/:post/comments', auth, function(req, res, next) {
-	var comment = new Comment(req.body);
-	comment.post = req.post;
+    var comment = new Comment(req.body);
+    comment.post = req.post;
     comment.author = req.payload.username;
 
-	comment.save(function(err, comment) {
-		if (err) { return next(err); }
+    comment.save(function(err, comment) {
+        if (err) { return next(err); }
 
-		req.post.comments.push(comment);
-		req.post.save(function(err, post) {
-			if (err) { return next(err); }
-			res.json(comment);
-		});
-	});
+        req.post.comments.push(comment);
+        req.post.save(function(err, post) {
+            if (err) { return next(err); }
+            res.json(comment);
+        });
+    });
 });
 
 /* Preload comment objects in routes/index.js so when a route URL
    is defined with :comment, this function will run first */
 router.param('comment', function(req, res, next, id) {
-  	var query = Comment.findById(id);
+    var query = Comment.findById(id);
 
-  	query.exec(function (err, comment) {
-    	if (err) { return next(err); }
-    	if (!comment) { return next(new Error('can\'t find comment')); }
+    query.exec(function (err, comment) {
+        if (err) { return next(err); }
+        if (!comment) { return next(new Error('can\'t find comment')); }
 
-    	req.comment = comment;
-    	return next();
-  	});
+        req.comment = comment;
+        return next();
+    });
 });
 
 /* PUT :post/comments/:comment upvote */
 router.put('/posts/:post/comments/:comment/upvote', auth, function(req, res, next) {
-  	req.comment.upvote(function(err, comment) {
-    	if (err) { return next(err); }
-    	res.json(comment);
-  	});
+    req.comment.upvote(function(err, comment) {
+        if (err) { return next(err); }
+        res.json(comment);
+    });
 });
 
 /* POST login */
