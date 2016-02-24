@@ -18,6 +18,7 @@ router.get('/posts', function(req, res, next) {
   	});
 });
 
+/* POST post */
 router.post('/posts', function(req, res, next) {
   	var post = new Post(req.body);
 
@@ -27,6 +28,8 @@ router.post('/posts', function(req, res, next) {
   	});
 });
 
+/* Preload post objects in routes/index.js so when a route URL
+   is defined with :post, this function will run first */
 router.param('post', function(req, res, next, id) {
   	var query = Post.findById(id);
 
@@ -39,6 +42,7 @@ router.param('post', function(req, res, next, id) {
   	});
 });
 
+/* GET :post post object */
 router.get('/posts/:post', function(req, res) {
 	req.post.populate('comments', function(err, post) {
 		if (err) { return next(err); }
@@ -46,6 +50,7 @@ router.get('/posts/:post', function(req, res) {
 	});
 });
 
+/* PUT :post upvote */
 router.put('/posts/:post/upvote', function(req, res, next) {
   	req.post.upvote(function(err, post) {
     	if (err) { return next(err); }
@@ -53,6 +58,7 @@ router.put('/posts/:post/upvote', function(req, res, next) {
   	});
 });
 
+/* POST comment */
 router.post('/posts/:post/comments', function(req, res, next) {
 	var comment = new Comment(req.body);
 	comment.post = req.post;
@@ -68,6 +74,8 @@ router.post('/posts/:post/comments', function(req, res, next) {
 	});
 });
 
+/* Preload comment objects in routes/index.js so when a route URL
+   is defined with :comment, this function will run first */
 router.param('comment', function(req, res, next, id) {
   	var query = Comment.findById(id);
 
@@ -80,11 +88,14 @@ router.param('comment', function(req, res, next, id) {
   	});
 });
 
+/* PUT :post/comments/:comment upvote */
 router.put('/posts/:post/comments/:comment/upvote', function(req, res, next) {
   	req.comment.upvote(function(err, comment) {
     	if (err) { return next(err); }
     	res.json(comment);
   	});
 });
+
+
 
 module.exports = router;
