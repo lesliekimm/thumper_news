@@ -1,4 +1,4 @@
-#thumper_news
+#thumper news
 
 <h2>MEAN Stack Flapper News thinkster Tutorial</h2>
 
